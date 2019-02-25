@@ -1,0 +1,146 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 41
+Server version: 5.5.51 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2016, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| latihan            |
+| latihan1           |
+| latihan2           |
+| latihan3           |
+| latihan4           |
+| mysql              |
+| performance_schema |
+| pratikum3          |
+| pratikum4          |
+| test               |
++--------------------+
+11 rows in set (0.00 sec)
+
+mysql> use latihan4;
+Database changed
+mysql> show tables;
++--------------------+
+| Tables_in_latihan4 |
++--------------------+
+| customer           |
+| pesanan            |
++--------------------+
+2 rows in set (0.00 sec)
+
+mysql> desc customer;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| kode_pembeli | char(5)     | NO   | PRI | NULL    |       |
+| nama         | varchar(15) | NO   |     | NULL    |       |
+| alamat       | varchar(15) | NO   |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.24 sec)
+
+mysql> desc pesanan;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| kode_barang  | char(5)     | NO   | PRI | NULL    |       |
+| kode_pembeli | char(5)     | NO   |     | NULL    |       |
+| nama_barang  | varchar(10) | NO   |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.08 sec)
+
+mysql> select * from customer;
++--------------+----------------+--------------+
+| kode_pembeli | nama           | alamat       |
++--------------+----------------+--------------+
+| C001         | adi laskmana   | curug tiga   |
+| C002         | burhanudin     | cikarang     |
+| C003         | siska andayani | bekasi timur |
+| C004         | ridwan santoso | bekasi raya  |
+| C005         | frasiska murni | cibenda raya |
++--------------+----------------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from pesanan;
++-------------+--------------+-------------+
+| kode_barang | kode_pembeli | nama_barang |
++-------------+--------------+-------------+
+| B001        | C001         | sabun cuci  |
+| B002        | C002         | pasta gigi  |
+| B003        | C003         | sikat gigi  |
+| B004        | C004         | shampo      |
+| B005        | C005         | handuk      |
++-------------+--------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select pesanan.kode_barang, customer.nama, pesanan.nama_barang
+    -> from pesanan
+    -> inner join customer
+    -> on pesanan.kode_pembeli=customer.kode_pembeli;
++-------------+----------------+-------------+
+| kode_barang | nama           | nama_barang |
++-------------+----------------+-------------+
+| B001        | adi laskmana   | sabun cuci  |
+| B002        | burhanudin     | pasta gigi  |
+| B003        | siska andayani | sikat gigi  |
+| B004        | ridwan santoso | shampo      |
+| B005        | frasiska murni | handuk      |
++-------------+----------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select customer.nama, pesanan.kode_pembeli
+    -> from customer
+    -> left join pesanan
+    -> on customer.kode_pembeli=pesanan.kode_pembeli
+    -> order by customer.nama;
++----------------+--------------+
+| nama           | kode_pembeli |
++----------------+--------------+
+| adi laskmana   | C001         |
+| burhanudin     | C002         |
+| frasiska murni | C005         |
+| ridwan santoso | C004         |
+| siska andayani | C003         |
++----------------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select pesanan.kode_barang, customer.alamat
+    -> from pesanan
+    -> right join customer
+    -> on pesanan.kode_pembeli=customer.kode_pembeli
+    -> order by pesanan.kode_pembeli;
++-------------+--------------+
+| kode_barang | alamat       |
++-------------+--------------+
+| B001        | curug tiga   |
+| B002        | cikarang     |
+| B003        | bekasi timur |
+| B004        | bekasi raya  |
+| B005        | cibenda raya |
++-------------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from customer full join pesanan using(kode_pembeli);
++--------------+----------------+--------------+-------------+-------------+
+| kode_pembeli | nama           | alamat       | kode_barang | nama_barang |
++--------------+----------------+--------------+-------------+-------------+
+| C001         | adi laskmana   | curug tiga   | B001        | sabun cuci  |
+| C002         | burhanudin     | cikarang     | B002        | pasta gigi  |
+| C003         | siska andayani | bekasi timur | B003        | sikat gigi  |
+| C004         | ridwan santoso | bekasi raya  | B004        | shampo      |
+| C005         | frasiska murni | cibenda raya | B005        | handuk      |
++--------------+----------------+--------------+-------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql>
